@@ -1,77 +1,107 @@
-// KartYukseltici.jsx import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; import KartlarEkrani from "./KartlarEkrani";
 
-export default function KartYukseltici({ kartSeviye, setKartSeviye, kartIndex }) { const [gosterReklam, setGosterReklam] = useState(false); const [reklamIzleniyor, setReklamIzleniyor] = useState(false); const [reklamBekleme, setReklamBekleme] = useState({});
+export default function App() { const [score, setScore] = useState(0); const [energy, setEnergy] = useState(5500); const [maxEnergy] = useState(5500); const [hourlyProfit] = useState(302549); const [aktifEkran, setAktifEkran] = useState("HOME"); const [kartSeviye, setKartSeviye] = useState(Array(60).fill(1));
 
-const reklamIzle = () => { const now = Date.now(); const sonIzleme = reklamBekleme[kartIndex] || 0;
+const handlePizzaClick = () => { if (energy <= 0) return; setScore(score + 1); setEnergy(energy - 1); };
 
-if (now - sonIzleme < 2 * 60 * 60 * 1000) {
-  alert("Bu kart için reklam izleyerek yükseltme 2 saatte bir yapılabilir.");
-  return;
-}
+useEffect(() => { const regen = setInterval(() => { setEnergy((prev) => (prev < maxEnergy ? prev + 10 : prev)); }, 1000); return () => clearInterval(regen); }, [maxEnergy]);
 
-setReklamIzleniyor(true);
-setTimeout(() => {
-  setKartSeviye((prev) => {
-    const yeni = [...prev];
-    yeni[kartIndex] += 1;
-    return yeni;
-  });
-  setReklamIzleniyor(false);
-  setGosterReklam(false);
-  setReklamBekleme({ ...reklamBekleme, [kartIndex]: Date.now() });
-}, 5000); // 5 saniyelik reklam simülasyonu
+return ( <div style={{ backgroundImage: "url('https://i.imgur.com/zDo0In2.jpg')", backgroundSize: "cover", minHeight: "100vh", color: "#fff", fontFamily: "Arial, sans-serif", paddingBottom: 80, }} > {aktifEkran === "HOME" && ( <> {/* Üst Bilgi */} <div style={{ padding: 20 }}> <h2>🍕 Pizza Tapp</h2> <p>Profit per hour: +{hourlyProfit.toLocaleString()}</p> </div>
 
-};
+{/* Buton Menüsü */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          padding: "10px 0",
+          flexWrap: "wrap",
+        }}
+      >
+        {["Daily Login", "Lucky Code", "Daily Bounty", "Achievements"].map((item) => (
+          <div
+            key={item}
+            style={{
+              backgroundColor: "#003366",
+              padding: 10,
+              margin: 5,
+              borderRadius: 10,
+              textAlign: "center",
+              minWidth: 80,
+              fontSize: 12,
+            }}
+          >
+            {item}
+          </div>
+        ))}
+      </div>
 
-return ( <div style={{ border: "1px solid #fff", borderRadius: 10, padding: 10, margin: 5 }}> <p>Kart {kartIndex + 1} - Seviye: {kartSeviye[kartIndex]}</p> <button onClick={() => setKartSeviye((prev) => { const yeni = [...prev]; yeni[kartIndex] += 1; return yeni; })}> Coin ile Yükselt </button>
+      {/* Puan Sayacı */}
+      <h1 style={{ textAlign: "center", fontSize: 30, marginTop: 10 }}>
+        🍕 {score.toLocaleString()}
+      </h1>
 
-<button onClick={() => setGosterReklam(true)}>Reklam İzle +1 Seviye</button>
+      {/* Ortadaki Pizza */}
+      <div style={{ textAlign: "center", marginTop: 20 }}>
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Pizza-300px.png"
+          alt="pizza"
+          onClick={handlePizzaClick}
+          style={{
+            width: 150,
+            height: 150,
+            cursor: "pointer",
+            transition: "transform 0.2s",
+          }}
+        />
+        <p>Tap the pizza!</p>
+      </div>
 
-  {gosterReklam && (
-    <div style={{ backgroundColor: "#000000aa", padding: 10, marginTop: 10 }}>
-      {reklamIzleniyor ? (
-        <p>Reklam izleniyor...⏳</p>
-      ) : (
-        <>
-          <p>5 saniyelik reklam simülasyonu</p>
-          <button onClick={reklamIzle}>Reklamı Başlat</button>
-          <button onClick={() => setGosterReklam(false)}>Kapat</button>
-        </>
-      )}
-    </div>
+      {/* Enerji & Butonlar */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          alignItems: "center",
+          marginTop: 20,
+        }}
+      >
+        <div>⚡ {energy}/{maxEnergy}</div>
+        <button style={{ backgroundColor: "#5522ff", padding: "5px 15px", borderRadius: 10 }}>
+          Frens
+        </button>
+        <button style={{ backgroundColor: "#ff5522", padding: "5px 15px", borderRadius: 10 }}>
+          Boosts
+        </button>
+      </div>
+    </>
   )}
-</div>
 
-); }
+  {aktifEkran === "EARN" && <KartlarEkrani kartSeviye={kartSeviye} setKartSeviye={setKartSeviye} />}
 
-// App.jsx içinde örnek 3 ekranlı sistem // kartSeviye, setKartSeviye App içinde useState ile tanımlanmalı: // const [kartSeviye, setKartSeviye] = useState(Array(60).fill(1));
-
-// 3 bölmeli gösterim örneği:
-
-import React, { useState } from "react"; import KartYukseltici from "./KartYukseltici";
-
-export function KartlarEkrani() { const [kartSeviye, setKartSeviye] = useState(Array(60).fill(1)); const [aktifSayfa, setAktifSayfa] = useState(0);
-
-const kartlar = kartSeviye.slice(aktifSayfa * 20, (aktifSayfa + 1) * 20);
-
-return ( <div style={{ padding: 20 }}> <h2>Saatlik Kazanç Kartları</h2>
-
-<div style={{ display: "flex", gap: 10, marginBottom: 10 }}>
-    {[0, 1, 2].map((i) => (
-      <button key={i} onClick={() => setAktifSayfa(i)}>
-        {i + 1}. Sayfa
-      </button>
+  {/* Alt Navigasyon */}
+  <div
+    style={{
+      position: "fixed",
+      bottom: 0,
+      width: "100%",
+      display: "flex",
+      justifyContent: "space-around",
+      backgroundColor: "#001133",
+      padding: "10px 0",
+      color: "#fff",
+      fontSize: 12,
+    }}
+  >
+    {["HOME", "REWARDS", "EARN", "GIFT", "NFT"].map((item) => (
+      <div
+        key={item}
+        style={{ cursor: "pointer" }}
+        onClick={() => setAktifEkran(item)}
+      >
+        {item}
+      </div>
     ))}
   </div>
-
-  {kartlar.map((_, i) => (
-    <KartYukseltici
-      key={aktifSayfa * 20 + i}
-      kartIndex={aktifSayfa * 20 + i}
-      kartSeviye={kartSeviye}
-      setKartSeviye={setKartSeviye}
-    />
-  ))}
 </div>
 
 ); }
