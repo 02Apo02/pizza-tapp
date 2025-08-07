@@ -2,66 +2,130 @@ import React, { useState, useEffect } from "react";
 
 export default function App() {
   const [score, setScore] = useState(0);
-  const [pizzaPos, setPizzaPos] = useState({ top: 50, left: 50 });
-  const [timeLeft, setTimeLeft] = useState(20);
-  const [gameOver, setGameOver] = useState(false);
+  const [energy, setEnergy] = useState(5500);
+  const [maxEnergy] = useState(5500);
+  const [hourlyProfit] = useState(302549);
+
+  const handlePizzaClick = () => {
+    if (energy <= 0) return;
+    setScore(score + 1);
+    setEnergy(energy - 1);
+  };
 
   useEffect(() => {
-    if (timeLeft === 0) {
-      setGameOver(true);
-      return;
-    }
-    const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-    return () => clearTimeout(timer);
-  }, [timeLeft]);
-
-  function handlePizzaClick() {
-    if (gameOver) return;
-    setScore(score + 1);
-    setPizzaPos({
-      top: Math.floor(Math.random() * 80) + 10 + "%",
-      left: Math.floor(Math.random() * 80) + 10 + "%",
-    });
-  }
+    const regen = setInterval(() => {
+      setEnergy((prev) => (prev < maxEnergy ? prev + 10 : prev));
+    }, 1000);
+    return () => clearInterval(regen);
+  }, [maxEnergy]);
 
   return (
-    <div style={{ textAlign: "center", fontFamily: "Arial", marginTop: 50 }}>
-      <h1>Pizza Tapp Game</h1>
-      <p>Time Left: {timeLeft} seconds</p>
-      <p>Score: {score}</p>
+    <div
+      style={{
+        backgroundImage:
+          "url('https://i.imgur.com/zDo0In2.jpg')",
+        backgroundSize: "cover",
+        minHeight: "100vh",
+        color: "#fff",
+        fontFamily: "Arial, sans-serif",
+        paddingBottom: 80,
+      }}
+    >
+      {/* Üst Bilgi */}
+      <div style={{ padding: 20 }}>
+        <h2>🍕 Pizza Tapp</h2>
+        <p>Profit per hour: +{hourlyProfit.toLocaleString()}</p>
+      </div>
 
-      {gameOver ? (
-        <h2>Game Over! Your final score is {score}</h2>
-      ) : (
-        <div
+      {/* Buton Menüsü */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          padding: "10px 0",
+          flexWrap: "wrap",
+        }}
+      >
+        {[
+          "Daily Login",
+          "Lucky Code",
+          "Daily Bounty",
+          "Achievements",
+        ].map((item) => (
+          <div
+            key={item}
+            style={{
+              backgroundColor: "#003366",
+              padding: 10,
+              margin: 5,
+              borderRadius: 10,
+              textAlign: "center",
+              minWidth: 80,
+              fontSize: 12,
+            }}
+          >
+            {item}
+          </div>
+        ))}
+      </div>
+
+      {/* Puan Sayacı */}
+      <h1 style={{ textAlign: "center", fontSize: 30, marginTop: 10 }}>
+        🍕 {score.toLocaleString()}
+      </h1>
+
+      {/* Ortadaki Pizza */}
+      <div style={{ textAlign: "center", marginTop: 20 }}>
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Pizza-300px.png"
+          alt="pizza"
           onClick={handlePizzaClick}
           style={{
-            position: "relative",
-            width: 300,
-            height: 300,
-            margin: "20px auto",
-            border: "2px solid #333",
-            borderRadius: 10,
-            backgroundColor: "#f8e5d8",
+            width: 150,
+            height: 150,
             cursor: "pointer",
+            transition: "transform 0.2s",
           }}
-        >
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Pizza-300px.png"
-            alt="pizza"
-            style={{
-              width: 60,
-              height: 60,
-              position: "absolute",
-              top: pizzaPos.top,
-              left: pizzaPos.left,
-              userSelect: "none",
-              transition: "top 0.3s, left 0.3s",
-            }}
-          />
-        </div>
-      )}
-      <p>Click the pizza as many times as you can before time runs out!</p>
+        />
+        <p>Tap the pizza!</p>
+      </div>
+
+      {/* Enerji & Butonlar */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          alignItems: "center",
+          marginTop: 20,
+        }}
+      >
+        <div>⚡ {energy}/{maxEnergy}</div>
+        <button style={{ backgroundColor: "#5522ff", padding: "5px 15px", borderRadius: 10 }}>
+          Frens
+        </button>
+        <button style={{ backgroundColor: "#ff5522", padding: "5px 15px", borderRadius: 10 }}>
+          Boosts
+        </button>
+      </div>
+
+      {/* Alt Navigasyon */}
+      <div
+        style={{
+          position: "fixed",
+          bottom: 0,
+          width: "100%",
+          display: "flex",
+          justifyContent: "space-around",
+          backgroundColor: "#001133",
+          padding: "10px 0",
+          color: "#fff",
+          fontSize: 12,
+        }}
+      >
+        {["HOME", "REWARDS", "EARN", "GIFT", "NFT"].map((item) => (
+          <div key={item}>{item}</div>
+        ))}
+      </div>
     </div>
   );
 }
