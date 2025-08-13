@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
-import KartlarEkrani from "./kartlarekrani";
-import KartYukseltici from "./kartyukseltici";
-import Main from "./main";
-import LoadingScreen from "./LoadingScreen";
+import KartlarEkrani from "./KartlarEkrani";
 
 export default function App() {
   const [score, setScore] = useState(0);
@@ -11,15 +8,6 @@ export default function App() {
   const [hourlyProfit] = useState(302549);
   const [aktifEkran, setAktifEkran] = useState("HOME");
   const [kartSeviye, setKartSeviye] = useState(Array(60).fill(1));
-
-  // Loading durumu eklendi
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // 5 saniye sonra loading bitiyor ve ana ekrana geçiliyor
-    const timer = setTimeout(() => setLoading(false), 5000);
-    return () => clearTimeout(timer);
-  }, []);
 
   const handlePizzaClick = () => {
     if (energy <= 0) return;
@@ -34,12 +22,6 @@ export default function App() {
     return () => clearInterval(regen);
   }, [maxEnergy]);
 
-  // Eğer loading devam ediyorsa sadece LoadingScreen göster
-  if (loading) {
-    return <LoadingScreen />;
-  }
-
-  // Loading bitince asıl oyun içeriği gösterilir
   return (
     <div
       style={{
