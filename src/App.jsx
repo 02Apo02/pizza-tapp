@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import KartlarEkrani from "./KartlarEkrani";
-
+import LoadingScreen from "./LoadingScreen";
 export default function App() {
   const [score, setScore] = useState(0);
   const [energy, setEnergy] = useState(5500);
