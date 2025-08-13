@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import KartlarEkrani from "./kartlarekrani";
+import KartYukseltici from "./kartyukseltici";
+import Main from "./main";
 import LoadingScreen from "./LoadingScreen";
 
 export default function App() {
