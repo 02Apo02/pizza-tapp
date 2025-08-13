@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import KartYukseltici from "./KartYukseltici";
+import KartYukseltici from "./kartyukseltici";
 
 export default function KartlarEkrani({ kartSeviye, setKartSeviye }) {
   const [aktifSayfa, setAktifSayfa] = useState(0);
