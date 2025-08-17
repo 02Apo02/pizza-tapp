@@ -1,12 +1,21 @@
 import React from "react";
 
-export default function Navbar({ setActiveScreen }) {
+export default function Navbar({ setScreen, active }) {
+  const Btn = ({ id, children }) => (
+    <button
+      onClick={() => setScreen(id)}
+      style={{ borderColor: active === id ? "#ffd54a" : "rgba(255,255,255,.12)" }}
+    >
+      {children}
+    </button>
+  );
+
   return (
     <div className="navbar">
-      <button onClick={() => setActiveScreen("main")}>Ana</button>
-      <button onClick={() => setActiveScreen("gorev")}>Görev</button>
-      <button onClick={() => setActiveScreen("saatlik")}>Saatlik Kazanç</button>
-      <button onClick={() => setActiveScreen("wallet")}>Cüzdan</button>
+      <Btn id="home">🍕 Ana</Btn>
+      <Btn id="airdrop">🎁 Airdrop</Btn>
+      <Btn id="tasks">📋 Görevler</Btn>
+      <Btn id="earn">⏳ Kazanç</Btn>
     </div>
   );
 }
