@@ -50,4 +50,4 @@ export default function App() {
       <Navbar setScreen={setScreen} active={screen} />
     </div>
   );
-}
+} 
