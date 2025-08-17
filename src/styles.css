@@ -1,0 +1,36 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+.space-bg {
+  background: url("https://www.transparenttextures.com/patterns/stardust.png"),
+    radial-gradient(circle at top, #1b2735, #090a0f);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.screen {
+  text-align: center;
+  padding: 20px;
+}
+
+.tap-btn {
+  font-size: 20px;
+  padding: 15px 30px;
+  margin-top: 20px;
+  background: orange;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-around;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.6);
+}
